@@ -1,4 +1,4 @@
-package project.eyelashes.RicoEyelash;
+package project.eyelashes.RicoEyelash.main;
 
 /**
  * Hello world!

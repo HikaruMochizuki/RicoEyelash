@@ -1,22 +1,42 @@
-package project.eyelashes.RicoEyelash;
+package project.eyelashes.RicoEyelash.main;
 
-import static project.eyelashes.RicoEyelash.Constants.*;
+import static project.eyelashes.RicoEyelash.main.Constants.*;
 
 import java.util.Scanner;
+
+import project.eyelashes.RicoEyelash.elements.impl.Type1;
+import project.eyelashes.RicoEyelash.elements.impl.TypeNull;
+import project.eyelashes.RicoEyelash.elements.type.Molgana;
 
 public class Executor {
 
 	//System.inをcloseしないように
-	//Scannerクラスを大量に生成しないように
+	//Scannerクラスを大量に生成しないようにクラスフィールドでスキャナーを作成
 	private static final Scanner scanner = new Scanner(System.in);
 
 	public Executor() {
 	}
 
 	public static void execute(){
-		String name = null;
 		int mode = 0;
-		String answer = null;
+
+		//モード選択
+		mode = selectMode();
+
+		//モード実行
+		Molgana doll = null;
+		if(mode == 1){
+			doll = new Type1();
+		}else {
+			doll = new TypeNull();
+		}
+		doll.action();
+	}
+
+	private static int selectMode() {
+		int mode = 0;
+		String name;
+		String answer;
 		boolean loopFlg = true;
 
 		System.out.println("あなたのお名前は？");
@@ -37,6 +57,7 @@ public class Executor {
 			}
 		}
 		System.out.println(mode + "モードを開始します");
+		return mode;
 	}
 
 	private static int scanInputNum(){
