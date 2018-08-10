@@ -1,39 +1,32 @@
 package project.eyelashes.RicoEyelash.main;
 
-import static project.eyelashes.RicoEyelash.main.Constants.*;
+import static project.eyelashes.RicoEyelash.common.Common.*;
+import static project.eyelashes.RicoEyelash.common.Constants.*;
 
-import java.util.Scanner;
-
-import project.eyelashes.RicoEyelash.elements.impl.Type1;
-import project.eyelashes.RicoEyelash.elements.impl.TypeNull;
-import project.eyelashes.RicoEyelash.elements.type.Molgana;
+import project.eyelashes.RicoEyelash.actor.Actor;
+import project.eyelashes.RicoEyelash.actor.Mode1;
+import project.eyelashes.RicoEyelash.actor.ModeNull;
 
 public class Executor {
-
-	//System.inをcloseしないように
-	//Scannerクラスを大量に生成しないようにクラスフィールドでスキャナーを作成
-	private static final Scanner scanner = new Scanner(System.in);
 
 	public Executor() {
 	}
 
 	public static void execute(){
-		int mode = 0;
-
 		//あいさつ
 		greeting();
+		lineSeparator();
 
 		//モード選択
-		mode = selectMode();
+		Actor mode = selectMode();
+		lineSeparator();
 
 		//モード実行
-		Molgana doll = null;
-		if(mode == 1){
-			doll = new Type1();
-		}else {
-			doll = new TypeNull();
-		}
-		doll.action();
+		mode.action();
+		lineSeparator();
+
+		//終了
+		System.out.println("モード実行を終了します。");
 	}
 
 	private static void greeting() {
@@ -45,49 +38,33 @@ public class Executor {
 		System.out.println("Hello World! " + name + "!");
 	}
 
-	private static int selectMode() {
+	private static Actor selectMode() {
 		int mode = 0;
 		String answer;
 		boolean loopFlg = true;
 
 		//モード選択
 		//モード選択を終えるまで繰り返し
+		Actor modeObj = null;
 		while(loopFlg){
 			System.out.println("モードを選択してください。");
+			System.out.println("1：Mode1");
 			System.out.print(prompt);
 			mode = scanInputNum();
-			System.out.println(mode + "モードを選択しました。");
-			System.out.println("現在"+ mode + "モードです。");
-			System.out.println("モード選択をつづけますか？y/n");
+			//選択に応じてモードを実装
+			if(mode == 1){
+				modeObj = new Mode1();
+			}else{
+				modeObj = new ModeNull();
+			}
+			System.out.println(modeObj.getName() + "を実行しますか？y/n");
 			System.out.print(prompt);
 			answer = scanInputStr();
-			if("no".equals(answer)||"n".equals(answer)){
+			if("yes".equals(answer)||"y".equals(answer)){
 				loopFlg = false;
 			}
 		}
-		System.out.println(mode + "モードを開始します。");
-		return mode;
-	}
-
-
-
-	private static int scanInputNum(){
-		int inputNum = 0;
-		try{
-			inputNum = Integer.parseInt(scanner.nextLine());
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return inputNum;
-	}
-
-	private static String scanInputStr(){
-		String inputStr = null;
-		try{
-			inputStr = scanner.nextLine();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return inputStr;
+		System.out.println(modeObj.getName() + "を開始します。");
+		return modeObj;
 	}
 }
