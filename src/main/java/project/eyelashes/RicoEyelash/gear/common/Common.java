@@ -1,4 +1,4 @@
-package project.eyelashes.RicoEyelash.common;
+package project.eyelashes.RicoEyelash.gear.common;
 
 import java.util.Scanner;
 

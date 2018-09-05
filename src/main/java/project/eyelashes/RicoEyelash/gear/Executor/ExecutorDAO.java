@@ -1,4 +1,4 @@
-package project.eyelashes.RicoEyelash.dao;
+package project.eyelashes.RicoEyelash.gear.Executor;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -6,9 +6,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class DataAccessor {
+public class ExecutorDAO {
 
-	public DataAccessor() {
+	public ExecutorDAO() {
 	}
 
 	public boolean isExistingUser(String inName){

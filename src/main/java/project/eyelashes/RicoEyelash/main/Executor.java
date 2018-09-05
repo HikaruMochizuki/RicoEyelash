@@ -1,31 +1,63 @@
 package project.eyelashes.RicoEyelash.main;
 
-import static project.eyelashes.RicoEyelash.common.Common.*;
-import static project.eyelashes.RicoEyelash.common.Constants.*;
+import static project.eyelashes.RicoEyelash.gear.common.Common.*;
+import static project.eyelashes.RicoEyelash.gear.common.Constants.*;
 
 import project.eyelashes.RicoEyelash.actor.Actor;
-import project.eyelashes.RicoEyelash.actor.Mode1;
+import project.eyelashes.RicoEyelash.actor.Mode1FileReader;
+import project.eyelashes.RicoEyelash.actor.Mode2DirectorySearcher;
 import project.eyelashes.RicoEyelash.actor.ModeNull;
-import project.eyelashes.RicoEyelash.dao.DataAccessor;
+import project.eyelashes.RicoEyelash.gear.Executor.ExecutorDAO;
 
+/**
+ *
+ * @author Amami
+ *
+ */
 public class Executor {
 
 	public Executor() {
 	}
 
+	/**
+	 * 基本処理フロー
+	 */
 	public static void execute(){
-		//ユーザ判定
-		boolean userCheck = userCheck();
-		lineSeparator();
+		//初期化
+		boolean continueFlg = true;
+		Actor mode = new ModeNull();
+		boolean userCheck =false;
+		LoginUser loginUser = new LoginUser(START_PHASE_LOGIN);
 
-		//ユーザ判定OKの場合
-		if(userCheck){
-			//モード選択
-			Actor mode = selectMode();
-			lineSeparator();
+		//コンテニューされる限り繰り返し
+		while(continueFlg){
+			//ユーザ判定
+			if(loginUser.getStartPhase() <= START_PHASE_LOGIN){
+				userCheck = userCheck();
+				lineSeparator();
+			}
 
-			//モード実行
-			mode.action();
+			//ユーザ判定OKの場合
+			if(userCheck){
+				//モード選択
+				if(loginUser.getStartPhase() <= START_PHASE_MODE_SELECT){
+					mode = selectMode();
+					lineSeparator();
+				}
+
+				//モード実行
+				if(loginUser.getStartPhase() <= START_PHASE_EXECUTE_MODE){
+					mode.action();
+				}
+				lineSeparator();
+			}
+
+			//コンテニュー判定
+			continueFlg = checkContinue();
+			//どこからはじめるか選択
+			if(continueFlg){
+				choiceStartPhase(loginUser);
+			}
 			lineSeparator();
 		}
 		//終了
@@ -41,13 +73,13 @@ public class Executor {
 		name = scanInputStr();
 
 		//ユーザの存在チェック
-		checkresult = new DataAccessor().isExistingUser(name);
-
+		checkresult = new ExecutorDAO().isExistingUser(name);
 		if(checkresult){
 			System.out.println("こんにちは、 " + name + "!");
 		}else{
 			System.out.println("登録されたユーザではありません。");
 		}
+
 		return checkresult;
 	}
 
@@ -57,19 +89,22 @@ public class Executor {
 		boolean loopFlg = true;
 
 		//モード選択
-		//モード選択を終えるまで繰り返し
-		Actor modeObj = null;
+		Actor modeObj = new ModeNull();
+		//モード選択を終えるまで繰り返す
 		while(loopFlg){
 			System.out.println("モードを選択してください。");
 			System.out.println("1：Mode1");
+			System.out.println("2：Mode2");
 			System.out.print(prompt);
 			mode = scanInputNum();
+
 			//選択に応じてモードを実装
 			if(mode == 1){
-				modeObj = new Mode1();
-			}else{
-				modeObj = new ModeNull();
+				modeObj = new Mode1FileReader();
+			}else if (mode == 2){
+				modeObj = new Mode2DirectorySearcher();
 			}
+
 			System.out.println(modeObj.getName() + "を実行しますか？y/n");
 			System.out.print(prompt);
 			answer = scanInputStr();
@@ -80,4 +115,29 @@ public class Executor {
 		System.out.println(modeObj.getName() + "を開始します。");
 		return modeObj;
 	}
+
+	private static boolean checkContinue(){
+		boolean continueFlg;
+		String answer;
+		System.out.println("続けますか？");
+		System.out.print(prompt);
+		answer = scanInputStr();
+		if("yes".equals(answer)||"y".equals(answer)){
+			continueFlg = true;
+		}else{
+			continueFlg = false;
+		}
+		return continueFlg;
+	}
+
+	private static void choiceStartPhase(LoginUser loginUser){
+		System.out.println("どこからはじめますか？");
+		System.out.println("ログイン：0");
+		System.out.println("モード選択：1");
+		System.out.println("モード実行：2");
+		System.out.print(prompt);
+		int answer = scanInputNum();
+		loginUser.setStartPhase(answer);
+	}
+
 }
