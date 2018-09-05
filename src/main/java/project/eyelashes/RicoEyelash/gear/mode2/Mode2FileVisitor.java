@@ -6,7 +6,7 @@ import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 
-public class MyFileVisitor extends SimpleFileVisitor<Path> {
+public class Mode2FileVisitor extends SimpleFileVisitor<Path> {
 
 	@Override
 	public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException{

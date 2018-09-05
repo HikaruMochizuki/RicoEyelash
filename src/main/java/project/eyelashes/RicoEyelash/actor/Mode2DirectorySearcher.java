@@ -8,7 +8,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import project.eyelashes.RicoEyelash.gear.mode2.MyFileVisitor;
+import project.eyelashes.RicoEyelash.gear.mode2.Mode2FileVisitor;
 
 public class Mode2DirectorySearcher extends Actor {
 
@@ -24,7 +24,7 @@ public class Mode2DirectorySearcher extends Actor {
 		Path searchRoot = Paths.get(path);
 
 		try {
-			Files.walkFileTree(searchRoot, new MyFileVisitor());
+			Files.walkFileTree(searchRoot, new Mode2FileVisitor());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
