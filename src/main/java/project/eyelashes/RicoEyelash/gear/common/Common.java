@@ -1,5 +1,8 @@
 package project.eyelashes.RicoEyelash.gear.common;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.Scanner;
 
 public final class Common {
@@ -30,5 +33,13 @@ public final class Common {
 
 	public static void lineSeparator(){
 		System.out.println("================================");
+	}
+
+	public static Connection getDbConnection() throws SQLException{
+		String url = "jdbc:oracle:thin:@192.168.2.110:1521:db01";
+		String schema = "RICO_EYELASH";
+		String password = "rico_eyelash";
+		Connection con = DriverManager.getConnection(url, schema, password);
+		return con;
 	}
 }

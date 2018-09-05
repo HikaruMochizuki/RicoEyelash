@@ -8,4 +8,5 @@ public final class Constants {
 	public static final int START_PHASE_MODE_SELECT = 1;
 
 	public static final int START_PHASE_EXECUTE_MODE = 2;
+
 }

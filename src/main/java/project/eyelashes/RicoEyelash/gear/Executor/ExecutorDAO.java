@@ -1,10 +1,11 @@
 package project.eyelashes.RicoEyelash.gear.Executor;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
+import project.eyelashes.RicoEyelash.gear.common.Common;
 
 public class ExecutorDAO {
 
@@ -18,7 +19,7 @@ public class ExecutorDAO {
 
 		String sql = getSQL();
 
-		try(Connection con = getDbConnection();
+		try(Connection con = Common.getDbConnection();
 			PreparedStatement stmt = con.prepareStatement(sql)){
 			stmt.setString(1, inName);
 
@@ -36,14 +37,6 @@ public class ExecutorDAO {
 			e.printStackTrace();
 		}
 		return existingFlg;
-	}
-
-	private Connection getDbConnection() throws SQLException{
-		String url = "jdbc:oracle:thin:@192.168.2.110:1521:db01";
-		String schema = "RICO_EYELASH";
-		String password = "rico_eyelash";
-		Connection con = DriverManager.getConnection(url, schema, password);
-		return con;
 	}
 
 	private String getSQL(){

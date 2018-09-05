@@ -6,6 +6,7 @@ import static project.eyelashes.RicoEyelash.gear.common.Constants.*;
 import project.eyelashes.RicoEyelash.actor.Actor;
 import project.eyelashes.RicoEyelash.actor.Mode1FileReader;
 import project.eyelashes.RicoEyelash.actor.Mode2DirectorySearcher;
+import project.eyelashes.RicoEyelash.actor.Mode3UserController;
 import project.eyelashes.RicoEyelash.actor.ModeNull;
 import project.eyelashes.RicoEyelash.gear.Executor.ExecutorDAO;
 
@@ -93,8 +94,9 @@ public class Executor {
 		//モード選択を終えるまで繰り返す
 		while(loopFlg){
 			System.out.println("モードを選択してください。");
-			System.out.println("1：Mode1");
-			System.out.println("2：Mode2");
+			System.out.println("1：" + new Mode1FileReader().getName());
+			System.out.println("2：" + new Mode2DirectorySearcher().getName());
+			System.out.println("3:" + new Mode3UserController().getName());
 			System.out.print(prompt);
 			mode = scanInputNum();
 
@@ -103,6 +105,8 @@ public class Executor {
 				modeObj = new Mode1FileReader();
 			}else if (mode == 2){
 				modeObj = new Mode2DirectorySearcher();
+			}else if (mode == 3) {
+				modeObj = new Mode3UserController();
 			}
 
 			System.out.println(modeObj.getName() + "を実行しますか？y/n");

@@ -13,7 +13,7 @@ import project.eyelashes.RicoEyelash.gear.mode2.MyFileVisitor;
 public class Mode2DirectorySearcher extends Actor {
 
 	public Mode2DirectorySearcher() {
-		super("Mode2");
+		super("ディレクトリ探索");
 	}
 
 	@Override

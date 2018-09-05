@@ -10,7 +10,7 @@ import project.eyelashes.RicoEyelash.gear.mode1.Mode1DAO;
 public class Mode1FileReader extends Actor {
 
 	public Mode1FileReader() {
-		super("Mode1");
+		super("ファイル読み込み");
 	}
 
 	@Override
