@@ -7,6 +7,7 @@ import project.eyelashes.RicoEyelash.actor.Actor;
 import project.eyelashes.RicoEyelash.actor.Mode1FileReader;
 import project.eyelashes.RicoEyelash.actor.Mode2DirectorySearcher;
 import project.eyelashes.RicoEyelash.actor.Mode3UserController;
+import project.eyelashes.RicoEyelash.actor.Mode4HTTPConnection;
 import project.eyelashes.RicoEyelash.actor.ModeNull;
 import project.eyelashes.RicoEyelash.gear.Executor.ExecutorDAO;
 
@@ -32,28 +33,30 @@ public class Executor {
 
 		//コンテニューされる限り繰り返し
 		while(continueFlg){
-			//ユーザ判定
+			//ログインフェーズ
 			if(loginUser.getStartPhase() <= START_PHASE_LOGIN){
+				//ユーザ判定
 				userCheck = userCheck();
 				lineSeparator();
 			}
 
-			//ユーザ判定OKの場合
+			//モード選択/実行フェーズ
+			//ユーザ判定OKの場合のみ遷移
 			if(userCheck){
-				//モード選択
+				//モード選択フェーズ
 				if(loginUser.getStartPhase() <= START_PHASE_MODE_SELECT){
 					mode = selectMode();
 					lineSeparator();
 				}
 
-				//モード実行
+				//モード実行フェーズ
 				if(loginUser.getStartPhase() <= START_PHASE_EXECUTE_MODE){
 					mode.action();
 				}
 				lineSeparator();
 			}
 
-			//コンテニュー判定
+			//コンテニューフェーズ
 			continueFlg = checkContinue();
 			//どこからはじめるか選択
 			if(continueFlg){
@@ -85,30 +88,42 @@ public class Executor {
 	}
 
 	private static Actor selectMode() {
+		//初期化
 		int mode = 0;
 		String answer;
 		boolean loopFlg = true;
+		Actor modeObj = new ModeNull();
+
+		//全モードインスタンス生成
+		Actor mode1 = new Mode1FileReader();
+		Actor mode2 = new Mode2DirectorySearcher();
+		Actor mode3 = new Mode3UserController();
+		Actor mode4 = new Mode4HTTPConnection();
 
 		//モード選択
-		Actor modeObj = new ModeNull();
 		//モード選択を終えるまで繰り返す
 		while(loopFlg){
+			//モード選択画面表示
 			System.out.println("モードを選択してください。");
-			System.out.println("1：" + new Mode1FileReader().getName());
-			System.out.println("2：" + new Mode2DirectorySearcher().getName());
-			System.out.println("3:" + new Mode3UserController().getName());
+			System.out.println("1：" + mode1.getName());
+			System.out.println("2：" + mode2.getName());
+			System.out.println("3:" + mode3.getName());
+			System.out.println("4:" + mode4.getName());
 			System.out.print(prompt);
 			mode = scanInputNum();
 
 			//選択に応じてモードを実装
 			if(mode == 1){
-				modeObj = new Mode1FileReader();
+				modeObj = mode1;
 			}else if (mode == 2){
-				modeObj = new Mode2DirectorySearcher();
+				modeObj = mode2;
 			}else if (mode == 3) {
-				modeObj = new Mode3UserController();
+				modeObj = mode3;
+			}else if (mode == 4) {
+				modeObj = mode4;
 			}
 
+			//確認画面表示
 			System.out.println(modeObj.getName() + "を実行しますか？y/n");
 			System.out.print(prompt);
 			answer = scanInputStr();
