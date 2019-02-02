@@ -22,6 +22,14 @@ public class Executor {
 	}
 
 	/**
+	 * アプリケーション実行メソッド
+	 * @param args
+	 */
+	public static void main(String[] args){
+		Executor.execute();
+	}
+
+	/**
 	 * 基本処理フロー
 	 */
 	public static void execute(){
@@ -32,12 +40,26 @@ public class Executor {
 		LoginUser loginUser = new LoginUser(START_PHASE_LOGIN);
 
 		//コンテニューされる限り繰り返し
+		loop:
 		while(continueFlg){
 			//ログインフェーズ
-			if(loginUser.getStartPhase() <= START_PHASE_LOGIN){
-				//ユーザ判定
-				userCheck = userCheck();
-				lineSeparator();
+			boolean retryFlg = true;
+			while(retryFlg){
+				if(loginUser.getStartPhase() <= START_PHASE_LOGIN){
+					//ユーザ判定
+					userCheck = userCheck();
+					lineSeparator();
+					if(userCheck){
+						retryFlg = false;
+					} else{
+					//再ログイン要否選択
+						retryFlg = checkRetry();
+						if(!retryFlg){
+							//再ログインしない場合はアプリ終了
+							break loop;
+						}
+					}
+				}
 			}
 
 			//モード選択/実行フェーズ
@@ -157,6 +179,12 @@ public class Executor {
 		System.out.print(prompt);
 		int answer = scanInputNum();
 		loginUser.setStartPhase(answer);
+	}
+
+	private static boolean checkRetry(){
+		boolean retryFlg = true;
+
+		return retryFlg;
 	}
 
 }
