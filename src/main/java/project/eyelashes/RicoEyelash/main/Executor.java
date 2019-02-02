@@ -10,6 +10,7 @@ import project.eyelashes.RicoEyelash.actor.Mode3UserController;
 import project.eyelashes.RicoEyelash.actor.Mode4HTTPConnection;
 import project.eyelashes.RicoEyelash.actor.ModeNull;
 import project.eyelashes.RicoEyelash.gear.Executor.ExecutorDAO;
+import project.eyelashes.RicoEyelash.tmp.ExecutorDAODummy;
 
 /**
  *
@@ -54,6 +55,7 @@ public class Executor {
 					} else{
 					//再ログイン要否選択
 						retryFlg = checkRetry();
+						lineSeparator();
 						if(!retryFlg){
 							//再ログインしない場合はアプリ終了
 							break loop;
@@ -99,7 +101,8 @@ public class Executor {
 		name = scanInputStr();
 
 		//ユーザの存在チェック
-		checkresult = new ExecutorDAO().isExistingUser(name);
+		ExecutorDAO dao = new ExecutorDAODummy();
+		checkresult = dao.isExistingUser(name);
 		if(checkresult){
 			System.out.println("こんにちは、 " + name + "!");
 		}else{
@@ -182,8 +185,16 @@ public class Executor {
 	}
 
 	private static boolean checkRetry(){
-		boolean retryFlg = true;
-
+		boolean retryFlg;
+		String answer;
+		System.out.println("再度ログインしますか？");
+		System.out.print(prompt);
+		answer = scanInputStr();
+		if("yes".equals(answer)||"y".equals(answer)){
+			retryFlg = true;
+		}else{
+			retryFlg = false;
+		}
 		return retryFlg;
 	}
 
