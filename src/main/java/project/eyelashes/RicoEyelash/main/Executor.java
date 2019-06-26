@@ -37,7 +37,7 @@ public class Executor {
 		//初期化
 		boolean continueFlg = true;
 		Actor mode = new ModeNull();
-		boolean userCheck =false;
+		boolean userCheckResult =false;
 		LoginUser loginUser = new LoginUser(START_PHASE_LOGIN);
 
 		//コンテニューされる限り繰り返し
@@ -48,9 +48,9 @@ public class Executor {
 			while(retryFlg){
 				if(loginUser.getStartPhase() <= START_PHASE_LOGIN){
 					//ユーザ判定
-					userCheck = userCheck();
+					userCheckResult = userCheck();
 					lineSeparator();
-					if(userCheck){
+					if(userCheckResult){
 						retryFlg = false;
 					} else{
 					//再ログイン要否選択
@@ -66,7 +66,7 @@ public class Executor {
 
 			//モード選択/実行フェーズ
 			//ユーザ判定OKの場合のみ遷移
-			if(userCheck){
+			if(userCheckResult){
 				//モード選択フェーズ
 				if(loginUser.getStartPhase() <= START_PHASE_MODE_SELECT){
 					mode = selectMode();
